@@ -1,0 +1,168 @@
+public class MethodNode {
+	
+	private class WorkerNode{
+		private String name;
+		private WorkerNode boss;
+		private WorkerNode peer;
+		private WorkerNode subordinate;
+	}
+	
+	private WorkerNode manager;
+	private WorkerNode current;
+	
+	public MethodNode(String managerName){
+		this.manager=new WorkerNode();
+		this.manager.name=managerName;
+		this.current=this.manager;
+		addSubordinate2(1);
+		addSubordinate2(2);
+		addSubordinate2(3);
+	}
+	
+	public void addSubordinate2(int count){
+		
+		WorkerNode worker=new WorkerNode();
+		if (count ==1)
+		worker.name="Add";
+		if(count ==2)
+		worker.name="Get";
+		if(count ==3)
+		worker.name="Copy";
+		
+	
+		worker.boss=this.current;
+		if(this.current.subordinate==null)
+			this.current.subordinate=worker;
+		else{
+			WorkerNode next=this.current.subordinate;
+			while(next.peer!=null)
+				next=next.peer;
+			next.peer=worker;
+		}
+	}	
+	
+	public void addSubordinate(String name){
+		WorkerNode worker=new WorkerNode();
+		worker.name=name;
+		worker.boss=this.current;
+		if(this.current.subordinate==null)
+			this.current.subordinate=worker;
+		else{
+			WorkerNode next=this.current.subordinate;
+			while(next.peer!=null)
+				next=next.peer;
+			next.peer=worker;
+		}
+	}
+	
+	public void addSubordinate3(String name){
+		WorkerNode worker=new WorkerNode();
+		worker.name = Input.getString("insert sub-method name: ");
+		worker.boss=this.current;
+		if(this.current.subordinate==null)
+			this.current.subordinate=worker;
+		else{
+			WorkerNode next=this.current.subordinate;
+			while(next.peer!=null)
+				next=next.peer;
+			next.peer=worker;
+		}
+	}
+	
+	public boolean findWorker(String name){
+		boolean found=false;
+		boolean searching;
+		WorkerNode worker;
+		WorkerNode subordinate;
+		if(name.equalsIgnoreCase(this.manager.name)){
+			found=true;
+			worker=this.manager;
+		}
+		else{
+			worker=this.checkSubordinates(name,this.manager);
+			if(worker!=null)
+				found=true;
+			else{
+				subordinate=this.manager.subordinate;
+				searching=subordinate!=null;
+				while(searching){
+					worker=this.checkSubordinates(name,subordinate);
+					if(worker!=null){
+						searching=false;
+						found=true;
+					}
+					else{
+						subordinate=subordinate.peer;
+						if(subordinate==null)
+							searching=false;
+					}	
+				}
+			}
+		}
+		if(found)
+			this.current=worker;
+		return found;
+	}
+		
+	private WorkerNode checkSubordinates(String name,WorkerNode worker){
+		WorkerNode subordinate=worker.subordinate;
+		boolean searching=subordinate!=null;
+		while(searching){
+			if(name.equalsIgnoreCase(subordinate.name))
+				searching=false;
+			else{
+				subordinate=subordinate.peer;
+				if(subordinate==null)
+					searching=false;
+			}
+		}
+		return subordinate;
+	}
+		
+	public String getCurrent(){
+		String currentDetails=new String();
+		currentDetails+=this.current.name;
+		if(this.current.boss!=null)
+			currentDetails+=" is a method of "+this.current.boss.name+ '\n';
+		else
+			currentDetails+=" is the root. \n";
+		currentDetails+=this.getSubordinates(this.current);
+		return currentDetails;
+	}
+	
+	public String selectCalledMethod (String name){
+		
+		String currentDetails=new String();
+		currentDetails+=name;
+		currentDetails+=this.getSubordinates(this.current);
+		
+		addSubordinate3(name);
+	
+		return currentDetails;
+		
+	}
+	
+	public String toString (){
+		String officeDetails=new String();
+		officeDetails+=this.manager.name+'\n';
+		WorkerNode worker=this.manager.subordinate;
+		while(worker!=null){
+			officeDetails+="  "+worker.name+'\n';
+			officeDetails+=this.getSubordinates(worker);
+			worker=worker.peer;
+		}
+		return officeDetails;
+	}
+		
+	private String getSubordinates(WorkerNode worker){
+		String subordinatesDetails=new String();
+		worker=worker.subordinate;
+		while(worker!=null){
+			subordinatesDetails+="    "+worker.name+'\n';
+			worker=worker.peer;
+		}
+		return subordinatesDetails;
+	}
+}
+
+
