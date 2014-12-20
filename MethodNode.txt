@@ -14,32 +14,9 @@ public class MethodNode {
 		this.manager=new WorkerNode();
 		this.manager.name=managerName;
 		this.current=this.manager;
-		addSubordinate2(1);
-		addSubordinate2(2);
-		addSubordinate2(3);
 	}
 	
-	public void addSubordinate2(int count){
-		
-		WorkerNode worker=new WorkerNode();
-		if (count ==1)
-		worker.name="Add";
-		if(count ==2)
-		worker.name="Get";
-		if(count ==3)
-		worker.name="Copy";
-		
 	
-		worker.boss=this.current;
-		if(this.current.subordinate==null)
-			this.current.subordinate=worker;
-		else{
-			WorkerNode next=this.current.subordinate;
-			while(next.peer!=null)
-				next=next.peer;
-			next.peer=worker;
-		}
-	}	
 	
 	public void addSubordinate(String name){
 		WorkerNode worker=new WorkerNode();
@@ -55,7 +32,7 @@ public class MethodNode {
 		}
 	}
 	
-	public void addSubordinate3(String name){
+	public void addSubordinate3(){
 		WorkerNode worker=new WorkerNode();
 		worker.name = Input.getString("insert sub-method name: ");
 		worker.boss=this.current;
@@ -127,6 +104,8 @@ public class MethodNode {
 		else
 			currentDetails+=" is the root. \n";
 		currentDetails+=this.getSubordinates(this.current);
+		currentDetails+=" is a sub-metod of " + this.current.name;
+		
 		return currentDetails;
 	}
 	
@@ -136,7 +115,7 @@ public class MethodNode {
 		currentDetails+=name;
 		currentDetails+=this.getSubordinates(this.current);
 		
-		addSubordinate3(name);
+		addSubordinate3();
 	
 		return currentDetails;
 		
@@ -158,7 +137,7 @@ public class MethodNode {
 		String subordinatesDetails=new String();
 		worker=worker.subordinate;
 		while(worker!=null){
-			subordinatesDetails+="    "+worker.name+'\n';
+			subordinatesDetails+="    "+worker.name + "\n";
 			worker=worker.peer;
 		}
 		return subordinatesDetails;

@@ -7,34 +7,32 @@ public class MethodNodeTest {
 		System.out.println(node);
 		do{
 			System.out.println("0: quit");
-			System.out.println("1: add method to current");
-			System.out.println("2: Get method in current");
-			System.out.println("3: display current");
-			System.out.println("4: display methods");
-			System.out.println("5: search for method to select");
+			System.out.println("1: Add sub_Method to peer");
+			System.out.println("2: display current");
+			System.out.println("3: display methods");
+			System.out.println("4: Get method in current");
 			option=Input.getInteger("input option: ");
 			switch(option){
-				case 1:	name=Input.getString("input new method name: ");
-				node.addSubordinate(name);
-						break;
-				case 2:	name=Input.getString("input the method name: ");
-						found=node.findWorker(name);
-						if(!found)
-							System.out.println("not found");
-						else
-							System.out.println(node.getCurrent());
-						break;
-				case 3:	System.out.println(node.getCurrent());
-						break;
-				case 4:	System.out.println(node);
-						break;
-				case 5: name=Input.getString("input the method name: ");
+				case 1: name=Input.getString("input the method name to add the sub-method to: ");
 						found=node.findWorker(name);
 						if(!found)
 							System.out.println("not found");
 						else
 							System.out.println(node.selectCalledMethod(name));
 						break;
+				
+				case 2:	System.out.println(node.getCurrent());
+						break;
+				case 3:	System.out.println(node);
+						break;
+				case 4:	name=Input.getString("input the method name to find: ");
+						found=node.findWorker(name);
+						if(!found)
+							System.out.println("not found");
+						else
+							System.out.println(node.getCurrent());
+						break;
+				
 			}
 		}while(option!=0);
 	}
